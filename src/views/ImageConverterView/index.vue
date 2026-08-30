@@ -29,7 +29,7 @@ const {
 } = useImageConverter();
 
 const { pageScale } = usePageScale();
-const logoSrc = new URL("../../assets/img/logo.webp", import.meta.url).href;
+const logoSrc = new URL("../../assets/img/webp-logo.webp", import.meta.url).href;
 </script>
 
 <template>
