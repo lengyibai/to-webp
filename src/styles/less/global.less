@@ -1,0 +1,71 @@
+:root {
+  color-scheme: dark;
+  font-size: 15px;
+  font-family: Inter, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-rendering: optimizelegibility;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: @bg;
+}
+
+body {
+  min-height: 100vh;
+  color: @text;
+  background:
+    linear-gradient(fade(#fff, 2%) 1px, transparent 1px), linear-gradient(90deg, fade(#fff, 2%) 1px, transparent 1px),
+    @bg;
+  background-size: 32px 32px;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+button,
+input {
+  color: inherit;
+  font: inherit;
+}
+
+::selection {
+  color: #06140f;
+  background: @accent;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: @border-strong;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
