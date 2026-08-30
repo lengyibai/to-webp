@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onActivated, onDeactivated, onMounted, onUnmounted, ref, watch } from "vue";
 import { LuUpload } from "vue-icons-plus/lu";
 
 const props = defineProps<{
@@ -20,6 +20,7 @@ const qualityInput = ref(String(props.quality));
 const maxEdgeInput = ref(props.maxEdge === null ? "" : String(props.maxEdge));
 const fileInput = ref<HTMLInputElement | null>(null);
 let dragDepth = 0;
+let windowListenersActive = false;
 
 function containsFiles(event: DragEvent): boolean {
   return Array.from(event.dataTransfer?.types ?? []).includes("Files");
@@ -150,21 +151,32 @@ watch(
   },
 );
 
-onMounted(() => {
+const addWindowListeners = () => {
+  if (windowListenersActive) return;
+
   window.addEventListener("dragenter", handleDragEnter);
   window.addEventListener("dragover", handleDragOver);
   window.addEventListener("dragleave", handleDragLeave);
   window.addEventListener("drop", handleDrop);
   window.addEventListener("paste", handlePaste);
-});
+  windowListenersActive = true;
+};
 
-onUnmounted(() => {
+const removeWindowListeners = () => {
+  if (!windowListenersActive) return;
+
   window.removeEventListener("dragenter", handleDragEnter);
   window.removeEventListener("dragover", handleDragOver);
   window.removeEventListener("dragleave", handleDragLeave);
   window.removeEventListener("drop", handleDrop);
   window.removeEventListener("paste", handlePaste);
-});
+  windowListenersActive = false;
+};
+
+onMounted(addWindowListeners);
+onActivated(addWindowListeners);
+onDeactivated(removeWindowListeners);
+onUnmounted(removeWindowListeners);
 </script>
 
 <template>
@@ -378,7 +390,7 @@ onUnmounted(() => {
   margin-top: 22px;
   padding: 0 22px;
   border-radius: 6px;
-  color: #06140f;
+  color: @on-accent;
   font-size: 15px;
   font-weight: 750;
   background: @accent;

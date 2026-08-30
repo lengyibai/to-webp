@@ -8,9 +8,16 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    CompressionProgress: typeof import('./../components/CompressionProgress/index.vue')['default']
+    CompressionQueue: typeof import('./../components/CompressionQueue/index.vue')['default']
     ConversionProgress: typeof import('./../components/ConversionProgress.vue')['default']
     ConversionResults: typeof import('./../components/ConversionResults.vue')['default']
     ConversionSizeTotals: typeof import('./../components/ConversionSizeTotals.vue')['default']
     ConverterWorkspace: typeof import('./../components/ConverterWorkspace.vue')['default']
+    MediaToolHeader: typeof import('./../components/MediaToolHeader/index.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
+    ToolRouteSwitch: typeof import('./../components/ToolRouteSwitch/index.vue')['default']
+    VideoCompressorWorkspace: typeof import('./../components/VideoCompressorWorkspace/index.vue')['default']
   }
 }

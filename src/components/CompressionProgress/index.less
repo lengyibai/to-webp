@@ -1,0 +1,69 @@
+.progress-panel {
+  padding: var(--gap-4) var(--gap-5) var(--gap-5);
+  border-top: 1px solid @border;
+  background: fade(@bg, 24%);
+
+  > .progress-copy {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--gap-3);
+    gap: var(--gap-4);
+    color: @text;
+    font-size: 15px;
+
+    > span:last-child {
+      flex: 0 0 auto;
+      color: @text-muted;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  > .progress-track {
+    overflow: hidden;
+    height: 7px;
+    border-radius: var(--radius);
+    background: @bg;
+
+    > span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: @accent;
+      transition: width 180ms ease;
+    }
+  }
+
+  > .current-file {
+    display: block;
+    overflow: hidden;
+    margin-top: var(--gap-2);
+    color: @text-dim;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &.is-error {
+    > .progress-copy > span:first-child,
+    > .current-file {
+      color: @danger;
+    }
+
+    > .progress-track > span {
+      background: @danger;
+    }
+  }
+
+  &.is-stopped {
+    > .progress-copy > span:first-child,
+    > .current-file {
+      color: @warning;
+    }
+
+    > .progress-track > span {
+      background: @warning;
+    }
+  }
+}

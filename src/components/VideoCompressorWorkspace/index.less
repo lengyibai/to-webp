@@ -1,0 +1,321 @@
+.workspace {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+  height: 100%;
+  border: 1px solid @border;
+  border-radius: var(--radius-3);
+  box-shadow: 0 16px 48px fade(#000, 22%);
+  background: @surface;
+
+  > .settings-panel {
+    padding: var(--gap-5);
+    border-bottom: 1px solid @border;
+
+    > .settings-heading {
+      margin-bottom: var(--gap-4);
+
+      > div {
+        min-width: 0;
+
+        > .title {
+          display: block;
+          color: @text;
+          font-size: 17px;
+          font-weight: bold;
+        }
+
+        > .description {
+          display: block;
+          margin-top: var(--gap-1);
+          color: @text-muted;
+          font-size: 14px;
+        }
+      }
+    }
+
+    > .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--gap-3) var(--gap-4);
+    }
+  }
+
+  > .drop-zone {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 262px;
+    margin: var(--gap-5);
+    padding: var(--gap-8) var(--gap-6);
+    border: 1px dashed @border-strong;
+    border-radius: var(--radius-3);
+    background: fade(@bg, 54%);
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease;
+
+    &:hover {
+      border-color: fade(@accent, 72%);
+      background: fade(@accent, 5%);
+    }
+
+    &.is-busy {
+      opacity: 0.62;
+    }
+
+    &.is-dragging {
+      border-color: @accent;
+      background: @accent-soft;
+    }
+
+    > .file-input {
+      position: absolute;
+      overflow: hidden;
+      width: 1px;
+      height: 1px;
+      clip-path: inset(50%);
+    }
+
+    > .upload-symbol {
+      display: grid;
+      place-items: center;
+      width: 66px;
+      height: 66px;
+      margin-bottom: var(--gap-5);
+      border: 1px solid fade(@accent, 28%);
+      border-radius: 50%;
+      color: @accent;
+      background: @accent-soft;
+    }
+
+    > .drop-title {
+      color: @text;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    > .drop-subtitle {
+      margin-top: var(--gap-2);
+      color: @text-muted;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    > .status-message {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 100%;
+      margin-top: var(--gap-3);
+      gap: var(--gap-2);
+      color: @warning;
+      font-size: 13px;
+      text-align: center;
+
+      > svg {
+        flex: 0 0 auto;
+      }
+
+      &.is-error {
+        color: @danger;
+      }
+    }
+
+    > button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 146px;
+      min-height: 46px;
+      margin-top: var(--gap-5);
+      padding: 0 var(--gap-5);
+      border-radius: var(--radius-2);
+      gap: var(--gap-2);
+      color: @on-accent;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      background: @accent;
+      transition:
+        background-color 160ms ease,
+        transform 160ms ease;
+
+      &:hover:not(:disabled) {
+        background: @accent-hover;
+      }
+
+      &:active:not(:disabled) {
+        transform: scale(0.98);
+      }
+
+      &:focus-visible {
+        outline: 2px solid @text;
+        outline-offset: 2px;
+      }
+
+      &:disabled {
+        cursor: wait;
+        opacity: 0.6;
+      }
+    }
+  }
+}
+
+.setting-control,
+.frame-rate-control,
+.quality-control {
+  min-width: 0;
+  padding: var(--gap-3);
+  border: 1px solid @border;
+  border-radius: var(--radius-2);
+  background: fade(@bg, 42%);
+}
+
+.setting-control {
+  display: grid;
+  gap: var(--gap-2);
+
+  > .select-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    > select {
+      width: 100%;
+      height: 38px;
+      padding: 0 38px 0 var(--gap-3);
+      border: 1px solid @border-strong;
+      border-radius: var(--radius-2);
+      color: @text;
+      cursor: pointer;
+      appearance: none;
+      background: @bg;
+
+      &:focus-visible {
+        border-color: @accent;
+        outline: 2px solid fade(@accent, 22%);
+        outline-offset: 1px;
+      }
+    }
+
+    > svg {
+      position: absolute;
+      right: var(--gap-3);
+      color: @text-dim;
+      pointer-events: none;
+    }
+  }
+}
+
+.setting-label {
+  display: block;
+  color: @text-muted;
+  font-size: 14px;
+}
+
+.frame-rate-control,
+.quality-control {
+  display: grid;
+  gap: var(--gap-2);
+
+  > .frame-rate-options,
+  > .quality-options {
+    display: grid;
+    overflow: hidden;
+    height: 38px;
+    padding: 2px;
+    border: 1px solid @border-strong;
+    border-radius: var(--radius-2);
+    gap: 2px;
+    background: @bg;
+
+    &.frame-rate-options {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    &.quality-options {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    > label {
+      position: relative;
+      display: block;
+      min-width: 0;
+
+      > input {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        opacity: 0;
+
+        &:focus-visible + span {
+          outline: 2px solid fade(@accent, 52%);
+          outline-offset: -2px;
+        }
+
+        &:checked + span {
+          color: @on-accent;
+          font-weight: bold;
+          background: @accent;
+        }
+
+        &:disabled {
+          cursor: wait;
+        }
+      }
+
+      > span {
+        display: grid;
+        place-items: center;
+        width: 100%;
+        height: 100%;
+        border-radius: var(--radius);
+        color: @text-muted;
+        font-size: 14px;
+        transition:
+          color 160ms ease,
+          background-color 160ms ease;
+      }
+    }
+  }
+}
+
+@media (max-width: 1319.98px) {
+  .workspace {
+    > .settings-panel {
+      > .settings-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  }
+}
+
+@media (max-width: 767.98px) {
+  .workspace {
+    > .settings-panel {
+      padding: var(--gap-4);
+
+      > .settings-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    > .drop-zone {
+      min-height: 280px;
+      margin: var(--gap-3);
+      padding: var(--gap-7) var(--gap-4);
+
+      > .drop-title {
+        font-size: 18px;
+      }
+    }
+  }
+}

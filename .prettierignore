@@ -4,4 +4,5 @@
 *.woff
 dist
 node_modules
+src/typings/components.d.ts
 Test

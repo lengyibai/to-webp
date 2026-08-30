@@ -1,4 +1,16 @@
 :root {
+  --gap-1: 4px;
+  --gap-2: 8px;
+  --gap-3: 12px;
+  --gap-4: 16px;
+  --gap-5: 20px;
+  --gap-6: 24px;
+  --gap-7: 28px;
+  --gap-8: 32px;
+  --radius: 4px;
+  --radius-2: 6px;
+  --radius-3: 8px;
+
   color-scheme: dark;
   font-size: 15px;
   font-family: Inter, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -28,13 +40,14 @@ body {
 }
 
 button,
-input {
+input,
+select {
   color: inherit;
   font: inherit;
 }
 
 ::selection {
-  color: #06140f;
+  color: @on-accent;
   background: @accent;
 }
 
