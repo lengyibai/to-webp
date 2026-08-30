@@ -75,7 +75,6 @@ const principles = [
         <a class="source-link" href="https://github.com/lengyibai/tool" target="_blank" rel="noopener noreferrer"><LuGithub :size="17" aria-hidden="true" /><span>查看源码</span><LuArrowUpRight :size="16" aria-hidden="true" /></a>
       </div>
 
-      <div class="footer-note"><span>LOCAL MEDIA TOOLKIT</span><span>v1.0 / 2026</span></div>
     </div>
   </div>
 </template>
