@@ -184,7 +184,7 @@
         > .result-detail {
           display: block;
           overflow: hidden;
-          margin-top: var(--gap-1);
+          margin-top: 0;
           color: @text-muted;
           font-size: 13px;
           text-overflow: ellipsis;
@@ -208,6 +208,11 @@
 
             > .detail-separator {
               color: @text-dim;
+            }
+
+            > .frame-rate-warning {
+              color: @warning;
+              font-weight: bold;
             }
           }
 
@@ -240,35 +245,44 @@
         font-size: 14px;
         font-variant-numeric: tabular-nums;
 
-        > .compression-duration {
-          display: inline-flex;
-          align-items: center;
-          gap: var(--gap-1);
-          color: @text-muted;
-          white-space: nowrap;
-        }
+        > .result-summary {
+          display: grid;
+          justify-items: end;
+          min-width: 0;
+          gap: 0;
 
-        > .result-saving {
-          color: @accent;
-          font-weight: bold;
-
-          &.is-increase {
-            color: @warning;
+          > .compression-duration {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--gap-1);
+            color: @text-muted;
+            white-space: nowrap;
           }
-        }
 
-        > .result-progress {
-          color: @info;
-          font-weight: bold;
-        }
+          > .result-saving {
+            order: -1;
+            color: @accent;
+            font-weight: bold;
 
-        > .result-waiting {
-          color: @text-dim;
-        }
+            &.is-increase {
+              color: @warning;
+            }
+          }
 
-        > .result-error {
-          color: @danger;
-          font-weight: bold;
+          > .result-progress {
+            order: -1;
+            color: @info;
+            font-weight: bold;
+          }
+
+          > .result-waiting {
+            color: @text-dim;
+          }
+
+          > .result-error {
+            color: @danger;
+            font-weight: bold;
+          }
         }
 
         > button {

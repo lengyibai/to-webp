@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from "vue";
-
+import MediaToolHeader from "@/components/MediaToolHeader/index.vue";
 import ConversionResults from "@/components/ConversionResults.vue";
 import ConversionSizeTotals from "@/components/ConversionSizeTotals.vue";
 import ConverterWorkspace from "@/components/ConverterWorkspace.vue";
-import ToolRouteSwitch from "@/components/ToolRouteSwitch/index.vue";
 import { useImageConverter } from "@/composables/use-image-converter";
+import { usePageScale } from "@/composables/use-page-scale";
 
 const {
   quality,
@@ -29,55 +28,19 @@ const {
   recompress,
 } = useImageConverter();
 
-const desktopBreakpoint = 1024;
-const desktopReferenceHeight = 900;
-let removeViewportResizeListener: (() => void) | undefined;
-
-/** 页面随浏览器高度缩放的比例 */
-const pageScale = ref(1);
-
-onMounted(() => {
-  const updatePageScale = () => {
-    pageScale.value =
-      window.innerWidth < desktopBreakpoint
-        ? 1
-        : Math.min(1, Math.max(window.innerHeight / desktopReferenceHeight, 0.1));
-  };
-
-  updatePageScale();
-  window.addEventListener("resize", updatePageScale, { passive: true });
-  removeViewportResizeListener = () => window.removeEventListener("resize", updatePageScale);
-});
-
-onBeforeUnmount(() => removeViewportResizeListener?.());
+const { pageScale } = usePageScale();
+const logoSrc = new URL("../../assets/img/logo.webp", import.meta.url).href;
 </script>
 
 <template>
   <div class="app-viewport">
     <div class="app-shell" :style="{ zoom: pageScale }">
-      <div class="app-header">
-        <div class="brand">
-          <img class="brand-mark" src="@/assets/img/logo.webp" alt="" />
-          <div>
-            <span class="brand-title">WebP 图片转换器</span>
-            <span class="brand-subtitle">本地批量转换，图片不会上传到服务器</span>
-          </div>
-        </div>
-
-        <div class="header-actions">
-          <ToolRouteSwitch />
-          <a
-            class="github-link"
-            href="https://github.com/lengyibai/to-webp"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="查看 GitHub 仓库"
-            title="查看 GitHub 仓库"
-          >
-            <img src="@/assets/img/github.png" alt="" />
-          </a>
-        </div>
-      </div>
+      <MediaToolHeader
+        :logo-src="logoSrc"
+        title="WebP 图片转换器"
+        subtitle="本地批量转换，图片不会上传到服务器"
+        github-label="查看 GitHub 仓库"
+      />
 
       <div class="content-grid">
         <div class="primary-column">
@@ -135,14 +98,15 @@ onBeforeUnmount(() => removeViewportResizeListener?.());
 .content-grid {
   display: grid;
   align-items: stretch;
-  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-  gap: 22px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--gap-5);
+  min-height: 727.5px;
 }
 
 .primary-column {
   display: grid;
   min-width: 0;
-  gap: 22px;
+  gap: var(--gap-5);
 }
 
 .results-column {
@@ -156,87 +120,6 @@ onBeforeUnmount(() => removeViewportResizeListener?.());
   inset: 0;
 }
 
-.app-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
-  gap: 26px;
-
-  > .header-actions {
-    display: flex;
-    align-items: center;
-    flex: 0 0 auto;
-    gap: var(--gap-3);
-
-    > .github-link {
-      display: grid;
-      place-items: center;
-      flex: 0 0 50px;
-      width: 50px;
-      height: 50px;
-      border: 1px solid @border;
-      border-radius: @radius;
-      background: @surface;
-      transition:
-        border-color 160ms ease,
-        background-color 160ms ease,
-        transform 160ms ease;
-
-      > img {
-        display: block;
-        width: 32px;
-        height: 32px;
-      }
-
-      &:hover {
-        border-color: @border-strong;
-        background: @surface-hover;
-      }
-
-      &:active {
-        transform: scale(0.96);
-      }
-
-      &:focus-visible {
-        outline: 2px solid @accent;
-        outline-offset: 2px;
-      }
-    }
-  }
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-  gap: 16px;
-
-  .brand-title {
-    display: block;
-    color: @text;
-    font-size: 25px;
-    font-weight: 700;
-    line-height: 1.25;
-  }
-
-  .brand-subtitle {
-    display: block;
-    margin-top: 4px;
-    color: @text-muted;
-    font-size: 15px;
-  }
-}
-
-.brand-mark {
-  display: block;
-  flex: 0 0 48px;
-  width: 48px;
-  height: 48px;
-  border-radius: @radius;
-  object-fit: contain;
-}
-
 @media (max-width: 1023.98px) {
   .app-viewport {
     display: block;
@@ -245,6 +128,7 @@ onBeforeUnmount(() => removeViewportResizeListener?.());
 
   .content-grid {
     grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
   }
 
   .results-column,
@@ -257,21 +141,6 @@ onBeforeUnmount(() => removeViewportResizeListener?.());
   .app-shell {
     width: calc(100% - 28px);
     padding: 20px 0;
-  }
-
-  .app-header {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 14px;
-
-    > .header-actions {
-      justify-content: space-between;
-      width: 100%;
-    }
-  }
-
-  .brand-title {
-    font-size: 22px;
   }
 }
 </style>

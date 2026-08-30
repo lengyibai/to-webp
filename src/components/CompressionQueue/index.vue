@@ -54,6 +54,21 @@ const frameRateLabelMap: Record<VideoOutputFrameRate, string> = {
   "60": "60 FPS",
 };
 
+const frameRateValueMap: Record<VideoOutputFrameRate, number | undefined> = {
+  original: undefined,
+  "30": 30,
+  "60": 60,
+};
+
+const cannotIncreaseFrameRate = (result: VideoCompressionResult): boolean => {
+  const outputFrameRate = frameRateValueMap[result.frameRate];
+  return (
+    outputFrameRate !== undefined &&
+    result.sourceFrameRate !== undefined &&
+    outputFrameRate > result.sourceFrameRate
+  );
+};
+
 const canDownloadAll = computed(
   () => !$props.isProcessing && $props.results.some((result) => result.state === "success"),
 );
@@ -136,29 +151,34 @@ const formatCompressionDuration = (duration: number): string => {
             </span>
           </span>
           <span class="result-detail setting-detail">
-            <span>压缩质量 {{ qualityLabelMap[result.quality] }}</span>
+            <span>质量：{{ qualityLabelMap[result.quality] }}</span>
             <span class="detail-separator" aria-hidden="true">|</span>
-            <span>输出帧率 {{ frameRateLabelMap[result.frameRate] }}</span>
+            <span v-if="!cannotIncreaseFrameRate(result)">
+              帧率：{{ frameRateLabelMap[result.frameRate] }}
+            </span>
+            <span v-else class="frame-rate-warning">无法提高帧率</span>
           </span>
         </div>
 
         <div class="result-actions">
-          <span v-if="result.compressionDuration > 0" class="compression-duration">
-            <LuClock3 :size="14" aria-hidden="true" />
-            {{ formatCompressionDuration(result.compressionDuration) }}
-          </span>
-          <span
-            v-if="result.state === 'success'"
-            class="result-saving"
-            :class="{ 'is-increase': result.savedPercentage < 0 }"
-          >
-            {{ result.savedPercentage < 0 ? "增加" : "节省" }} {{ Math.abs(result.savedPercentage) }}%
-          </span>
-          <span v-else-if="result.state === 'processing'" class="result-progress">
-            {{ Math.round(result.progress) }}%
-          </span>
-          <span v-else-if="result.state === 'queued'" class="result-waiting">等待</span>
-          <span v-else-if="result.state === 'error'" class="result-error">失败</span>
+          <div class="result-summary">
+            <span v-if="result.compressionDuration > 0" class="compression-duration">
+              <LuClock3 :size="14" aria-hidden="true" />
+              {{ formatCompressionDuration(result.compressionDuration) }}
+            </span>
+            <span
+              v-if="result.state === 'success'"
+              class="result-saving"
+              :class="{ 'is-increase': result.savedPercentage < 0 }"
+            >
+              {{ result.savedPercentage < 0 ? "增加" : "节省" }} {{ Math.abs(result.savedPercentage) }}%
+            </span>
+            <span v-else-if="result.state === 'processing'" class="result-progress">
+              {{ Math.round(result.progress) }}%
+            </span>
+            <span v-else-if="result.state === 'queued'" class="result-waiting">等待</span>
+            <span v-else-if="result.state === 'error'" class="result-error">失败</span>
+          </div>
           <button
             v-if="result.state === 'queued' || result.state === 'processing'"
             class="is-danger"

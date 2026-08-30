@@ -467,7 +467,7 @@ onUnmounted(() => {
 
 .result-saving {
   display: grid;
-  gap: 3px;
+  gap: 0;
   justify-items: end;
   color: @text-muted;
   font-size: 14px;

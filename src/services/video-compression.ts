@@ -37,6 +37,8 @@ export interface VideoCompressionMetadata {
   mediaDuration: number;
   /** 原始分辨率文本 */
   sourceResolution: string;
+  /** 源视频帧率，无法估算时为空 */
+  sourceFrameRate?: number;
   /** 输出分辨率文本 */
   outputResolution: string;
 }
@@ -226,10 +228,19 @@ export const compressVideo = async ({
     ]);
     const duration = metadataDuration ?? (await videoTrack.computeDuration());
     const transform = resolveVideoTransform({ width: displayWidth, height: displayHeight }, settings.resolution);
+    let sourceFrameRate: number | undefined;
+    if (settings.frameRate !== "original") {
+      try {
+        sourceFrameRate = (await videoTrack.computeFrameRateMetrics()).bestGuessFrameRate;
+      } catch {
+        sourceFrameRate = undefined;
+      }
+    }
     const metadata: VideoCompressionMetadata = {
       duration: formatDuration(duration),
       mediaDuration: Number.isFinite(duration) && duration > 0 ? duration : 0,
       sourceResolution: `${Math.round(displayWidth)} × ${Math.round(displayHeight)}`,
+      sourceFrameRate,
       outputResolution: `${transform.width} × ${transform.height}`,
     };
     onMetadata(metadata);

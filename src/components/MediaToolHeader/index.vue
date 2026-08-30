@@ -8,13 +8,13 @@ interface Props {
   title: string;
   /** 页面副标题 */
   subtitle: string;
-  /** GitHub 仓库地址 */
-  githubUrl: string;
   /** GitHub 链接的无障碍名称 */
   githubLabel: string;
 }
 
 defineProps<Props>();
+
+const githubUrl = "https://github.com/lengyibai/tool";
 </script>
 
 <template>

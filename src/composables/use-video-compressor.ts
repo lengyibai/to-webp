@@ -66,6 +66,7 @@ export const useVideoCompressor = ({ enabled }: UseVideoCompressorOptions) => {
         sourceName: task.sourceName,
         duration: task.duration,
         sourceResolution: task.sourceResolution,
+        sourceFrameRate: task.sourceFrameRate,
         outputResolution: task.outputResolution,
         quality: task.settings.quality,
         frameRate: task.settings.frameRate,
@@ -200,6 +201,7 @@ export const useVideoCompressor = ({ enabled }: UseVideoCompressorOptions) => {
           task.duration = metadata.duration;
           task.mediaDuration = metadata.mediaDuration;
           task.sourceResolution = metadata.sourceResolution;
+          task.sourceFrameRate = metadata.sourceFrameRate;
           task.outputResolution = metadata.outputResolution;
         },
         onThumbnail: task.thumbnailUrl
@@ -306,9 +308,15 @@ export const useVideoCompressor = ({ enabled }: UseVideoCompressorOptions) => {
     const task = tasks.value.find((item) => item.id === id);
     if (!task || task.state !== "stopped") return;
 
+    task.settings = { ...settings.value };
     task.state = "queued";
     task.progress = 0;
     task.compressionDuration = 0;
+    task.outputResolution = "";
+    task.compressedSize = 0;
+    task.savedPercentage = 0;
+    task.outputBlob = undefined;
+    task.errorMessage = "";
     if (!activeAbortControllers.has(id)) void processQueue();
   };
 

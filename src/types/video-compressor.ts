@@ -46,6 +46,8 @@ export interface VideoCompressionTask {
   thumbnailUrl?: string;
   /** 原始分辨率文本 */
   sourceResolution: string;
+  /** 源视频帧率，无法估算时为空 */
+  sourceFrameRate?: number;
   /** 输出分辨率文本 */
   outputResolution: string;
   /** 原始文件体积 */
@@ -86,6 +88,8 @@ interface VideoCompressionResultBase {
   duration: string;
   /** 原始分辨率文本 */
   sourceResolution: string;
+  /** 源视频帧率，无法估算时为空 */
+  sourceFrameRate?: number;
   /** 输出分辨率文本 */
   outputResolution: string;
   /** 任务入队时保存的压缩质量 */

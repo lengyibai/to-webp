@@ -72,7 +72,7 @@ const principles = [
           <div class="privacy-copy"><span class="privacy-title">隐私优先的工作流</span><span class="privacy-text">文件不会离开当前浏览器标签页。</span></div>
           <div class="principle-list"><span v-for="principle in principles" :key="principle">{{ principle }}</span></div>
         </div>
-        <a class="source-link" href="https://github.com/lengyibai/to-webp" target="_blank" rel="noopener noreferrer"><LuGithub :size="17" aria-hidden="true" /><span>查看源码</span><LuArrowUpRight :size="16" aria-hidden="true" /></a>
+        <a class="source-link" href="https://github.com/lengyibai/tool" target="_blank" rel="noopener noreferrer"><LuGithub :size="17" aria-hidden="true" /><span>查看源码</span><LuArrowUpRight :size="16" aria-hidden="true" /></a>
       </div>
 
       <div class="footer-note"><span>LOCAL MEDIA TOOLKIT</span><span>v1.0 / 2026</span></div>
