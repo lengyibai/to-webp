@@ -54,6 +54,14 @@ const frameRateLabelMap: Record<VideoOutputFrameRate, string> = {
   "60": "60 FPS",
 };
 
+const frameRateLabel = (result: VideoCompressionResult): string => {
+  if (result.frameRate !== "original" || result.sourceFrameRate === undefined || !Number.isFinite(result.sourceFrameRate)) {
+    return frameRateLabelMap[result.frameRate];
+  }
+
+  return `${Math.round(result.sourceFrameRate * 100) / 100} FPS`;
+};
+
 const frameRateValueMap: Record<VideoOutputFrameRate, number | undefined> = {
   original: undefined,
   "30": 30,
@@ -143,18 +151,21 @@ const formatCompressionDuration = (duration: number): string => {
                 {{ result.outputResolution }}
               </span>
             </span>
-            <span v-if="result.state === 'success'" class="detail-separator" aria-hidden="true">|</span>
-            <span v-if="result.state === 'success'" class="size-detail">
-              <span>{{ formatFileSize(result.originalSize) }}</span>
-              <LuArrowRight :size="14" aria-hidden="true" />
-              <span>{{ formatFileSize(result.compressedSize) }}</span>
+            <span v-if="result.state === 'success' || result.state === 'processing'" class="detail-separator" aria-hidden="true">|</span>
+            <span v-if="result.state === 'success' || result.state === 'processing'" class="size-detail">
+              <template v-if="result.state === 'success'">
+                <span>{{ formatFileSize(result.originalSize) }}</span>
+                <LuArrowRight :size="14" aria-hidden="true" />
+                <span>{{ formatFileSize(result.compressedSize) }}</span>
+              </template>
+              <template v-else>{{ formatFileSize(result.originalSize) }}</template>
             </span>
           </span>
           <span class="result-detail setting-detail">
             <span>质量：{{ qualityLabelMap[result.quality] }}</span>
             <span class="detail-separator" aria-hidden="true">|</span>
             <span v-if="!cannotIncreaseFrameRate(result)">
-              帧率：{{ frameRateLabelMap[result.frameRate] }}
+              帧率：{{ frameRateLabel(result) }}
             </span>
             <span v-else class="frame-rate-warning">无法提高帧率</span>
           </span>
