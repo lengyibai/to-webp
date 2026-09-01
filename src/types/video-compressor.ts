@@ -4,7 +4,7 @@ export type VideoOutputResolution = "original" | "1080p" | "720p";
 
 export type VideoOutputFrameRate = "original" | "30" | "60";
 
-export type VideoCompressionQuality = "medium" | "high";
+export type VideoCompressionQuality = "low" | "medium" | "high";
 
 export type CompressionProgressPhase = "idle" | "preparing" | "compressing" | "stopped" | "done" | "error";
 

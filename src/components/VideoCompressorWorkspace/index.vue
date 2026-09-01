@@ -111,6 +111,16 @@ const handleDrop = (event: DragEvent) => {
                 v-model="settings.quality"
                 type="radio"
                 name="compression-quality"
+                value="low"
+                :disabled="settingsLocked"
+              />
+              <span>低</span>
+            </label>
+            <label>
+              <input
+                v-model="settings.quality"
+                type="radio"
+                name="compression-quality"
                 value="medium"
                 :disabled="settingsLocked"
               />

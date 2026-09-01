@@ -120,12 +120,12 @@ const frameRateMap: Record<VideoOutputFrameRate, number | undefined> = {
   "60": 60,
 };
 
-//1080p 沿用原有参数，4K 和 2K 提高质量值以保留更多高分辨率细节
-const videoQualityMap: Record<VideoQualityTier, Record<VideoCompressionQuality, number>> = {
-  "4k": { medium: 0.25, high: 0.45 },
-  "2k": { medium: 0.18, high: 0.36 },
-  "1080p": { medium: 0.1, high: 0.3 },
-  "720p": { medium: 0.08, high: 0.22 },
+//按最终输出分辨率和质量档位使用固定视频目标比特率，单位为 bits per second
+const videoBitrateMap: Record<VideoQualityTier, Record<VideoCompressionQuality, number>> = {
+  "4k": { low: 12_000_000, medium: 20_000_000, high: 30_000_000 },
+  "2k": { low: 6_000_000, medium: 10_000_000, high: 16_000_000 },
+  "1080p": { low: 3_000_000, medium: 6_000_000, high: 10_000_000 },
+  "720p": { low: 1_500_000, medium: 3_000_000, high: 5_000_000 },
 };
 
 const resolveVideoQualityTier = ({ width, height }: VideoDimensions): VideoQualityTier => {
@@ -197,7 +197,7 @@ export const checkVideoCompressionSupport = async (): Promise<string> => {
     const supported = await canEncodeVideo("avc", {
       width: 640,
       height: 360,
-      quality: new Quality(0.1),
+      bitrate: 500_000,
     });
     return supported ? "" : "当前设备不支持兼容编码";
   } catch {
@@ -270,12 +270,12 @@ export const compressVideo = async ({
     }
 
     const qualityTier = resolveVideoQualityTier(transform);
-    const quality = new Quality(videoQualityMap[qualityTier][settings.quality]);
+    const bitrate = videoBitrateMap[qualityTier][settings.quality];
     const frameRate = frameRateMap[settings.frameRate];
     const canEncodeAvc = await canEncodeVideo("avc", {
       width: transform.width,
       height: transform.height,
-      quality,
+      bitrate,
       hardwareAcceleration: automaticHardwareAcceleration,
     });
     if (!canEncodeAvc) throw new Error("当前设备不支持此分辨率的兼容编码");
@@ -286,7 +286,7 @@ export const compressVideo = async ({
     const toneMapHdrSample = (sample: VideoSample) => sample.transform({});
     const videoOptions = {
       codec: "avc" as const,
-      quality,
+      bitrate,
       hardwareAcceleration: automaticHardwareAcceleration,
       forceTranscode: true,
       frameRate,
